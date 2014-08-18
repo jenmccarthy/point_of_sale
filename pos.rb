@@ -89,11 +89,11 @@ def cashier_menu
     choice = gets.chomp
     case choice
     when '1'
-      cashier_add
+      cashier_add_customer
     when '2'
       cashier_create_sale
     when '3'
-      cashier_remove
+      cashier_remove_customer
     when '4'
       cashier_view_customers
     when '5'
@@ -153,16 +153,37 @@ end
 def manager_remove_product
   manager_view_products
   print "\n\nChoose [#] of product to delete: "
-  prod_inp = gets.chomp
+  prod_inp = gets.chomp.to_i
   result = Product.find(prod_inp)
   puts "#{result.name} deleted"
   result.delete
   puts "\n\n"
 end
 
+def cashier_add_customer
+  puts "\n\nPlease enter a customer name:"
+  customer_name = gets.chomp
+  new_customer = Customer.create({name: customer_name})
+  puts "Customer #{new_customer.name} has been added to the system\n\n"
+end
 
+def cashier_view_customers
+  puts "\n\n Current customer list: "
+  Customer.all.each do |customer|
+    puts "[#{customer.id}]--#{customer.name}"
+  end
+  puts "\n\n"
+end
 
-
+def cashier_remove_customer
+  cashier_view_customers
+  print "\n\nChoose [#] of customer you would like to delete: "
+  customer_input = gets.chomp.to_i
+  result = Customer.find(customer_input)
+  puts "#{result.name} has been deleted"
+  result.delete
+  puts "\n\n"
+end
 
 
 
