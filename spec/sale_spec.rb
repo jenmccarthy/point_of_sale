@@ -7,4 +7,10 @@ describe Sale do
     test_sale = Sale.create({customer_id: test_customer.id, cashier_id: test_cashier.id, date: '20140818'})
     expect(Sale.all).to eq [test_sale]
   end
+  it 'has many purchases' do
+    test_sale = Sale.create({customer_id: 1, cashier_id: 1, date: Time.now})
+    test_purchase1 = Purchase.create({product_id: 123, quantity: 1, sale_id: test_sale.id})
+    test_purchase2 = Purchase.create({product_id: 456, quantity: 1, sale_id: test_sale.id})
+    expect(test_sale.purchases).to eq [test_purchase1, test_purchase2]
+  end
 end
