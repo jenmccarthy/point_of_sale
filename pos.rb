@@ -83,7 +83,6 @@ def cashier_menu
     puts "[3] Remove customer"
     puts "[4] View customers"
     puts "[5] View Sales"
-    puts "[6] Return Sales"
     puts "[x] Exit"
     puts "\n\nEnter a choice: "
     choice = gets.chomp
@@ -98,8 +97,6 @@ def cashier_menu
       cashier_view_customers
     when '5'
       cashier_view_sales
-    when '6'
-      cashier_mark_sale_returned
     when 'x'
       puts "Good-bye!"
     else
