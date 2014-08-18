@@ -41,8 +41,8 @@ def manager_menu
     puts "Manager Menu"
     puts "-------------"
     puts "[1] Add cashier login"
-    puts "[2] Remove cashier login"
-    puts "[3] Add Product"
+    puts "[2] Add Product"
+    puts "[3] Remove cashier login"
     puts "[4] Remove Product"
     puts "[5] View all products"
     puts "[6] View all cashier logins"
@@ -54,9 +54,9 @@ def manager_menu
     when '1'
       manager_add_login
     when '2'
-      manager_remove_login
-    when '3'
       manager_add_product
+    when '3'
+      manager_remove_login
     when '4'
       manager_remove_product
     when '5'
@@ -79,8 +79,8 @@ def cashier_menu
     puts "Cashier Menu"
     puts "-------------"
     puts "[1] Add customer"
-    puts "[2] Remove customer"
-    puts "[3] Create a Sale"
+    puts "[2] Create a Sale"
+    puts "[3] Remove customer"
     puts "[4] View customers"
     puts "[5] View Sales"
     puts "[6] Return Sales"
@@ -91,9 +91,9 @@ def cashier_menu
     when '1'
       cashier_add
     when '2'
-      cashier_remove
-    when '3'
       cashier_create_sale
+    when '3'
+      cashier_remove
     when '4'
       cashier_view_customers
     when '5'
@@ -142,11 +142,25 @@ result = Product.create({name: product_inp, price: price_input})
 puts "Product added => name: #{result.name} price: $#{result.price}\n\n"
 end
 
-def manager_remove_product
+def manager_view_products
+  puts "\n\nCurrent Product List: "
+  Product.all.each do |product|
+    puts "[#{product.id}]--#{product.name}"
+  end
+  puts "\n\n"
 end
 
-def manager_view_products
+def manager_remove_product
+  manager_view_products
+  print "\n\nChoose [#] of product to delete: "
+  prod_inp = gets.chomp
+  result = Product.find(prod_inp)
+  puts "#{result.name} deleted"
+  result.delete
+  puts "\n\n"
 end
+
+
 
 
 
