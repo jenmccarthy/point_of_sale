@@ -134,7 +134,12 @@ def manager_remove_login
 end
 
 def manager_add_product
-
+print "\n\nEnter product name: "
+product_inp = gets.chomp
+print "\n\nEnter product price (Number only, decimal ok): $"
+price_input = gets.chomp.to_f
+result = Product.create({name: product_inp, price: price_input})
+puts "Product added => name: #{result.name} price: $#{result.price}\n\n"
 end
 
 def manager_remove_product
