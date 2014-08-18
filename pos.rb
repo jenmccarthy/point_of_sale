@@ -9,7 +9,7 @@ database_configurations = YAML::load(File.open('./db/config.yml'))
 development_configuration = database_configurations['development']
 ActiveRecord::Base.establish_connection(development_configuration)
 
-
+@current_cashier = nil
 
 def menu
   choice = nil
@@ -74,6 +74,12 @@ def manager_menu
 end
 
 def cashier_menu
+  puts "\n\n"
+  manager_view_logins
+  puts "Choose your [#] employee number: "
+  input_choice = gets.chomp
+  @current_cashier = Cashier.find(input_choice)
+  puts "\n\n#{@current_cashier.name} is currently logged in.\n\n"
   choice = nil
   until choice == 'x'
     puts "Cashier Menu"
@@ -98,7 +104,8 @@ def cashier_menu
     when '5'
       cashier_view_sales
     when 'x'
-      puts "Good-bye!"
+      puts "Logging out #{@current_cashier}."
+      @current_cashier = nil
     else
       puts "Sorry, that wasn't a valid option."
     end
@@ -180,6 +187,10 @@ def cashier_remove_customer
   puts "#{result.name} has been deleted"
   result.delete
   puts "\n\n"
+end
+
+def cashier_create_sale
+
 end
 
 
