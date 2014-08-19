@@ -15,6 +15,13 @@ describe Sale do
     expect(test_sale.purchases).to eq [test_purchase1, test_purchase2]
   end
 
+  it 'has many products through purchases' do
+    test_product = Product.create({name: 'Pizza', price: 5.99})
+    test_sale = Sale.create({date: Time.now, customer_id: 1, cashier_id: 1})
+    test_purchase = Purchase.create({product_id: test_product.id, quantity: 2, sale_id: test_sale.id})
+    expect(test_sale.products).to eq [test_product]
+  end
+
   it 'belongs to a customer, belongs to a cashier' do
     test_customer = Customer.create({name: 'Joseph'})
     test_cashier = Cashier.create({name: 'Chachi'})
