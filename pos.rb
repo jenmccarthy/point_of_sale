@@ -50,7 +50,8 @@ def manager_menu
     puts "[6] View all cashier logins"
     puts "[7] Total Sales by date range"
     puts "[8] View Cashier Productivity"
-    puts "[9] Delete all information from the database"
+    puts "[9] View Product Sales"
+    puts "[10] Delete all information from the database"
     puts "[x] Exit"
     puts "\n\nEnter a choice: "
     choice = gets.chomp
@@ -72,6 +73,8 @@ def manager_menu
     when '8'
       manager_view_cashier_sales
     when '9'
+      manager_view_product_sales
+    when '10'
       delete_all
     when 'x'
       puts "Good-bye!"
@@ -213,6 +216,16 @@ def manager_view_cashier_sales
   end
   puts"\n\n"
 end
+
+def manager_view_product_sales
+  Product.all.each do |product|
+    puts "#{product.name} has been sold #{product.number_of_purchases} times."
+  end
+  puts"\n\n"
+end
+
+
+
 
 def cashier_add_customer
   puts "\n\nPlease enter a customer name:"
