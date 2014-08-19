@@ -31,8 +31,15 @@ describe Sale do
   end
 
   it 'will return sales in a date range' do
-        test_sale1 = Sale.create({customer_id: 1, cashier_id: 1, date: "2014-03-16"})
-        test_sale2 = Sale.create({customer_id: 1, cashier_id: 1, date: "2014-08-18"})
-        expect(Sale.date_search("2014-08-01", "2014-08-18")).to eq [test_sale2]
+    test_sale1 = Sale.create({customer_id: 1, cashier_id: 1, date: "2014-03-16"})
+    test_sale2 = Sale.create({customer_id: 1, cashier_id: 1, date: "2014-08-19"})
+    expect(Sale.date_search("2014-08-19", "2014-08-20")).to eq [test_sale2]
+  end
+
+  it 'will return the total from a sale' do
+    test_sale1 = Sale.create({customer_id: 1, cashier_id: 1, date: "2014-03-16"})
+    test_product = Product.create({name: 'Pizza', price: 3.50})
+    test_purchase = Purchase.create({product_id: test_product.id, quantity: 2, sale_id: test_sale1.id, price_paid: test_product.price})
+    expect(test_sale1.total_paid).to eq 7.00
   end
 end

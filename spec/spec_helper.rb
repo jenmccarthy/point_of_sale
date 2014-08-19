@@ -5,6 +5,8 @@ require 'sale'
 require 'purchase'
 require 'customer'
 require 'product'
+require 'pry'
+
 
 database_configurations = YAML::load(File.open('./db/config.yml'))
 test_configuration = database_configurations['test']

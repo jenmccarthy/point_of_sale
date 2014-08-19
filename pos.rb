@@ -188,19 +188,17 @@ def manager_remove_product
 end
 
 def manager_total_sales
-  puts "enter start date to search from yyyy/mm/dd :"
+  puts "\n\nenter start date to search from yyyy/mm/dd :"
   start_inp = gets.chomp
   puts  "enter stop date for search yyyy/mm/dd :"
   stop_inp = gets.chomp
   sale_arr = Sale.date_search(start_inp, stop_inp)
+  sum = 0
   sale_arr.each do |each_sale|
-    each_sale.purchases.each do |purchase|
-      puts "Qty: #{purchase.quantity} -- Prod Id: #{purchase.product_id}"
-      current_product = Product.find(purchase.product_id)
-      puts "== Item: #{current_product.name}"
-      puts "Total Paid: $#{purchase.purchase_total}\n\n"
-    end
+    sum += each_sale.total_paid
   end
+  print "The total gross sales revenue: $#{sum}\n\n"
+
 end
 
 

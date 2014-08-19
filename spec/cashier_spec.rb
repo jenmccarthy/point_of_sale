@@ -21,5 +21,15 @@ describe Cashier do
     expect(test_cashier.purchases).to eq [test_purchase, test_purchase2]
   end
 
+  it 'will return the number of sales within a given date range' do
+    ralph = Cashier.create({name: 'Ralph'})
+    sally = Cashier.create({name: 'Sally'})
+    test_sale = Sale.create({customer_id: 1, cashier_id: ralph.id, date: '2014-08-19'})
+    test_sale2 = Sale.create({customer_id: 2, cashier_id: ralph.id, date: '2014-08-19'})
+    test_sale3 = Sale.create({customer_id: 2, cashier_id: sally.id, date: '2014-08-19'})
+    expect(ralph.number_of_sales('2014-08-19', '2014-08-20')).to eq 2
+  end
+
+
 end
 
