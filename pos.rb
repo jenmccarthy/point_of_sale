@@ -240,6 +240,13 @@ end
 def cashier_view_purchases_by_sale
   cashier_view_sales
   puts "\n\nChoose Sale [#] to view its purchase details"
+  sale_choice = gets.chomp.to_i
+  current_sale = Sale.find(sale_choice)
+  current_sale.purchases.each do |purchase|
+    puts "Qty: #{purchase.quantity} -- Prod Id: #{purchase.product_id}"
+    current_product = Product.find(purchase.product_id)
+    puts "== Item: #{current_product.name} \n\n"
+  end
 
 end
 
