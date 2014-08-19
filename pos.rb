@@ -154,7 +154,7 @@ end
 def manager_view_products
   puts "\n\nCurrent Product List: "
   Product.all.each do |product|
-    puts "[#{product.id}]--#{product.name}"
+    puts "[#{product.id}] -- #{product.name} -- $#{product.price}"
   end
   puts "\n\n"
 end
@@ -179,7 +179,7 @@ end
 def cashier_view_customers
   puts "\n\n Current customer list: "
   Customer.all.each do |customer|
-    puts "[#{customer.id}]--#{customer.name}"
+    puts "[#{customer.id}] -- #{customer.name}"
   end
   puts "\n\n"
 end
@@ -220,11 +220,21 @@ def add_product_to_purchases
   manager_view_products
   puts "choose product [#] to add"
   product = gets.chomp.to_i
+  @current_product = Product.find(product)
   puts "enter quantity"
   qty = gets.chomp.to_i
-  # puts "enter price paid"
-  # price = gets.chomp.to_f
-  Purchase.create({product_id: product, quantity: qty, sale_id: @current_sale.id})
+  puts "do you want to add a discount to this item y/n"
+  choice = gets.chomp.downcase
+  final_total = nil
+  if choice == 'y'
+    print "Please give a percentage % "
+    percent_input = gets.chomp.to_i
+    final_total = @current_product.price * (percent_input/100)
+  else choice == 'n'
+    final_total == @current_product.price
+  end
+  Purchase.create({product_id: product, quantity: qty, sale_id: @current_sale.id, price_paid: final_total})
+
 end
 
 def cashier_view_sales
@@ -243,6 +253,8 @@ def cashier_view_purchases_by_sale
   sale_choice = gets.chomp.to_i
   current_sale = Sale.find(sale_choice)
   current_sale.purchases.each do |purchase|
+    # purchase.purchase_total
+
     puts "Qty: #{purchase.quantity} -- Prod Id: #{purchase.product_id}"
     current_product = Product.find(purchase.product_id)
     puts "== Item: #{current_product.name} \n\n"
