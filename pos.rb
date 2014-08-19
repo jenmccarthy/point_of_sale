@@ -91,6 +91,7 @@ def cashier_menu
     puts "[3] Remove customer"
     puts "[4] View customers"
     puts "[5] View Sales"
+    puts "[6] View Purchases by Sale id"
     puts "[x] Exit"
     puts "\n\nEnter a choice: "
     choice = gets.chomp
@@ -105,6 +106,8 @@ def cashier_menu
       cashier_view_customers
     when '5'
       cashier_view_sales
+    when '6'
+      cashier_view_purchases_by_sale
     when 'x'
       puts "Logging out #{@current_cashier}."
       @current_cashier = nil
@@ -225,15 +228,20 @@ def add_product_to_purchases
 end
 
 def cashier_view_sales
-  puts "purchases for current sale: #{@current_sale}:"
-  puts "Sale Date ---- Customer ID -- Cashier ID"
-  puts "#{@current_sale.customer_id} -- #{@current_sale.cashier_id}"
-  puts "Purchases: "
-  @current_sale.purchases.each do |purchase|
-    puts "[#{purchase.id}--#{purchase.qty}]"
+  puts "\n\nCurrent Sales: "
+  puts "[Id] -- Sale date -- Customer Id - Cashier Id"
+  puts "---------------------------------------------"
+  Sale.all.each do |sale|
+    puts "[#{sale.id}] -- #{sale.date} -- #{sale.customer_id} -- #{sale.cashier_id}"
   end
+  puts "\n\n"
 end
 
+def cashier_view_purchases_by_sale
+  cashier_view_sales
+  puts "\n\nChoose Sale [#] to view its purchase details"
+
+end
 
 
 
