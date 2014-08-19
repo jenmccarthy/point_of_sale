@@ -10,6 +10,7 @@ development_configuration = database_configurations['development']
 ActiveRecord::Base.establish_connection(development_configuration)
 
 @current_cashier = nil
+@current_sale = nil
 
 def menu
   choice = nil
@@ -80,6 +81,7 @@ def cashier_menu
   input_choice = gets.chomp
   @current_cashier = Cashier.find(input_choice)
   puts "\n\n#{@current_cashier.name} is currently logged in.\n\n"
+  puts "@current_sale.id"
   choice = nil
   until choice == 'x'
     puts "Cashier Menu"
@@ -190,11 +192,47 @@ def cashier_remove_customer
 end
 
 def cashier_create_sale
-
+  puts "\n\n#{@current_cashier.name} [Create Sale]"
+  print "Select Customer [#] Id: "
+  cashier_view_customers
+  customer_inp = gets.chomp.to_i
+  current_customer = Customer.find(customer_inp)
+  @current_sale = Sale.create({date: Time.now, customer_id: current_customer.id, cashier_id: @current_cashier.id})
+  add_choice = nil
+  until add_choice == 'n'
+    puts "Enter a product y/n"
+    add_choice = gets.chomp
+    case add_choice
+    when 'y'
+      add_product_to_purchases
+    when 'n'
+      puts "done entering."
+    else
+      puts "y or n"
+    end
+  end
 end
 
+def add_product_to_purchases
+  manager_view_products
+  puts "choose product [#] to add"
+  product = gets.chomp.to_i
+  puts "enter quantity"
+  qty = gets.chomp.to_i
+  # puts "enter price paid"
+  # price = gets.chomp.to_f
+  Purchase.create({product_id: product, quantity: qty, sale_id: @current_sale.id})
+end
 
-
+def cashier_view_sales
+  puts "purchases for current sale: #{@current_sale}:"
+  puts "Sale Date ---- Customer ID -- Cashier ID"
+  puts "#{@current_sale.customer_id} -- #{@current_sale.cashier_id}"
+  puts "Purchases: "
+  @current_sale.purchases.each do |purchase|
+    puts "[#{purchase.id}--#{purchase.qty}]"
+  end
+end
 
 
 
