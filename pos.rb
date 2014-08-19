@@ -4,6 +4,7 @@ require './lib/cashier.rb'
 require './lib/customer.rb'
 require './lib/purchase.rb'
 require './lib/sale.rb'
+require 'pry'
 
 database_configurations = YAML::load(File.open('./db/config.yml'))
 development_configuration = database_configurations['development']
@@ -48,6 +49,7 @@ def manager_menu
     puts "[5] View all products"
     puts "[6] View all cashier logins"
     puts "[7] Total Sales by date range"
+    puts "[8] Delete all information from the database"
     puts "[x] Exit"
     puts "\n\nEnter a choice: "
     choice = gets.chomp
@@ -66,6 +68,8 @@ def manager_menu
       manager_view_logins
     when '7'
       manager_total_sales
+    when '8'
+      delete_all
     when 'x'
       puts "Good-bye!"
     else
@@ -114,6 +118,20 @@ def cashier_menu
     else
       puts "Sorry, that wasn't a valid option."
     end
+  end
+end
+
+def delete_all
+  puts "You are going to wipe the entire database. Are you sure y/n"
+  doomsday_choice = gets.chomp
+  if doomsday_choice == 'y'
+    Cashier.all.each { |cashier| cashier.destroy }
+    Customer.all.each { |customer| customer.destroy }
+    Purchase.all.each { |purchase| purchase.destroy }
+    Sale.all.each { |sale| sale.destroy }
+    Product.all.each { |product| product.destroy}
+  else
+    puts "Disaster averted."
   end
 end
 
@@ -228,13 +246,12 @@ def add_product_to_purchases
   final_total = nil
   if choice == 'y'
     print "Please give a percentage % "
-    percent_input = gets.chomp.to_i
-    final_total = @current_product.price * (percent_input/100)
+    percent_input = gets.chomp.to_f
+    final_total = @current_product.price - (@current_product.price * (percent_input/100))
   else choice == 'n'
-    final_total == @current_product.price
+    final_total = @current_product.price
   end
   Purchase.create({product_id: product, quantity: qty, sale_id: @current_sale.id, price_paid: final_total})
-
 end
 
 def cashier_view_sales
@@ -253,11 +270,10 @@ def cashier_view_purchases_by_sale
   sale_choice = gets.chomp.to_i
   current_sale = Sale.find(sale_choice)
   current_sale.purchases.each do |purchase|
-    # purchase.purchase_total
-
     puts "Qty: #{purchase.quantity} -- Prod Id: #{purchase.product_id}"
     current_product = Product.find(purchase.product_id)
-    puts "== Item: #{current_product.name} \n\n"
+    puts "== Item: #{current_product.name}"
+    puts "Total Paid: $#{purchase.purchase_total}\n\n"
   end
 
 end

@@ -29,4 +29,10 @@ describe Sale do
     expect(test_sale.customer).to eq test_customer
     expect(test_sale.cashier).to eq test_cashier
   end
+
+  it 'will return sales in a date range' do
+        test_sale1 = Sale.create({customer_id: 1, cashier_id: 1, date: "2014-03-16"})
+        test_sale2 = Sale.create({customer_id: 1, cashier_id: 1, date: "2014-08-18"})
+        expect(Sale.date_search("2014-08-01", "2014-08-18")).to eq [test_sale2]
+  end
 end
